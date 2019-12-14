@@ -149,7 +149,7 @@ public class EmployeeController {
         }
     }
 
-    //@RequestMapping("/emps")
+    @RequestMapping("/emps")
     @ResponseBody       //@ResponseBody作用自动将返回的对象转为json字符串   需要导入jackson包
     public Msg getEmpsWithJson(@RequestParam(value="pn",defaultValue="1")Integer pn) {
         PageHelper.startPage(pn, 5);//pn:页码  pageSize:一页的尺寸
@@ -161,7 +161,7 @@ public class EmployeeController {
 
     }
 
-    @RequestMapping("/emps")
+    //@RequestMapping("/emps")
     public String getEmps(@RequestParam(value = "pn",defaultValue="1")Integer pn,Model model){
         //这不是一个分页查询
         //引入PageHelper分页插件

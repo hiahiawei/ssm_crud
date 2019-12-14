@@ -12,7 +12,7 @@ public class UserService {
     @Autowired
     UserMapper userMapper;
 
-    public boolean login(User user){
+    public boolean select(User user){
         long c=0;
         UserExample example=new UserExample();
         UserExample.Criteria criteria=example.createCriteria();
@@ -20,5 +20,11 @@ public class UserService {
         criteria.andUserPasswordEqualTo(user.getUserPassword());
         long count=userMapper.countByExample(example);
         return count==c;
+    }
+
+    public boolean register(User user){
+        int insert = userMapper.insert(user);
+        return insert==1;
+
     }
 }

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+    <!--;数据库列一般是以单词命名，单词间以下划线分隔，而java属性一般采用驼峰命名法，
+    这样设置就可以自动进行映射表中的列和类中的属性。-->
+    <settings>
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+    </settings>
+
+    <typeAliases>
+        <package name="fan.bean"/>
+    </typeAliases>
+
+    <!--分页插件配置-->
+    <plugins>
+        <plugin interceptor="com.github.pagehelper.PageInterceptor">
+            <!--分页合理化参数，不可能为负数,也不可能大于总页数-->
+            <property name="reasonable" value="true"/>
+        </plugin>
+    </plugins>
+</configuration>
+

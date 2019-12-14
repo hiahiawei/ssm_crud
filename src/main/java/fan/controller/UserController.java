@@ -6,7 +6,6 @@ import fan.bean.User;
 import fan.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -16,23 +15,37 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    @RequestMapping(value = "/topage/{jspPage}",method=RequestMethod.GET)
-    public String toPage(@PathVariable("jspPage") String jspPage){
-        System.out.println(jspPage);
-        return jspPage;
+    @RequestMapping(value = "/login",method=RequestMethod.GET)
+    public String toLogin(){
+        return "login";
     }
 
-    @RequestMapping(value="/user",method= RequestMethod.POST)
+    @RequestMapping(value = "/toEmp",method=RequestMethod.GET)
+    public String toEmp(){
+        return "employee";
+    }
+
+    @RequestMapping(value="/userSelect",method= RequestMethod.POST)
     @ResponseBody
     public Msg login(User user){
         System.out.println(user);
-        if(userService.login(user)){
+        if(userService.select(user)){
             return Msg.fail();
         }else{
             return Msg.success();
         }
     }
 
+    @RequestMapping(value="/userInsert",method= RequestMethod.POST)
+    @ResponseBody
+    public Msg register(User user){
+        System.out.println(user);
+        if(userService.register(user)){
+            return Msg.fail();
+        }else{
+            return Msg.success();
+        }
+    }
 
 
 }

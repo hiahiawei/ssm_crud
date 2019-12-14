@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://java.sun.com/xml/ns/javaee"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+         id="WebApp_ID" version="2.5" metadata-complete="false">
+  <display-name>Archetype Created Web Application</display-name>
+
+  <!--配置Spring的监听器，默认只加载WEB-INF目录下的applicationContext.xml配置文件
+      当Web容器启动后，Spring的监听器会启动监听，监听是否创建ServletContext的对象，
+      如果发生了创建ServletContext对象这个事件(当web容器启动后一定会生成一个ServletContext对象，所以监听事件一定会发生)，
+      ContextLoaderListener类会实例化并且执行初始化方法，将spring的配置文件中配置的bean注册到Spring容器中，
+  -->
+  <listener>
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  </listener>
+  <!--设置配置文件的路径-->
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>classpath:applicationContext.xml</param-value>
+  </context-param>
+
+  <!--配置前端控制器-->
+  <servlet>
+    <servlet-name>dispatcherServlet</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <!--加载springmvc.xml配置文件-->
+    <init-param>
+      <param-name>contextConfigLocation</param-name>
+      <param-value>classpath:springmvc.xml</param-value>
+    </init-param>
+    <!--启动服务器，创建该servlet-->
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>dispatcherServlet</servlet-name>
+    <url-pattern>/</url-pattern>
+  </servlet-mapping>
+
+  <!--解决中文乱码的过滤器,一定要放在所有过滤器之前-->
+  <filter>
+    <filter-name>characterEncodingFilter</filter-name>
+    <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+    <init-param>
+      <param-name>encoding</param-name>
+      <param-value>UTF-8</param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>characterEncodingFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+  <!--使用Rest风格的URI，将页面普通的post请求转为指定的delete或者put请求
+  HiddenHttpMethodFilter工作原理是将jsp页面的form表单的method属性值在doFilterInternal方法中转化为标准的Http方法，
+  即GET,、POST、 HEAD、OPTIONS、PUT、DELETE、TRACE，然后到Controller中找到对应的方法。
+
+  过滤器使用_method的这个参数来决定过滤成是什么类型的，因此，需要在前端的提交表单里面加上_method的隐藏域，注意要使用post方法进行提交。
+  表单设置如下：
+  <form action="..." method="post">
+          <input type="hidden" name="_method" value="put" />
+          ......
+  </form>
+  -->
+  <filter>
+    <filter-name>HiddenHttpMethodFilter</filter-name>
+    <filter-class>org.springframework.web.filter.HiddenHttpMethodFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>HiddenHttpMethodFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+  <!--配上这个才可以直接发put请求，详细见controller中employeeController中的说明-->
+  <filter>
+    <filter-name>HttpPutFormContentFilter</filter-name>
+    <filter-class>org.springframework.web.filter.HttpPutFormContentFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>HttpPutFormContentFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+
+</web-app>
